@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>METHODS</title>
+  <style>
+    body {
+      background-color: black;
+      color: red;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      text-shadow: 0 0 10px red;
+    }
+    a.button, a.back-button {
+      display: inline-block;
+      padding: 12px 20px;
+      margin: 10px;
+      background: red;
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+    .content {
+      max-width: 700px;
+      margin: 20px auto;
+      text-align: left;
+    }
+    .section {
+      margin-bottom: 30px;
+    }
+    .section h2 {
+      color: #ff4c4c;
+      margin-bottom: 10px;
+    }
+    .section a {
+      color: red;
+      text-decoration: underline;
+      display: block;
+      margin: 5px 0;
+    }
+    hr {
+      border-color: red;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>METHODS</h1>
+  <a href="index.html" class="back-button">BACK</a>
+  <div class="content">
+    <div class="section">
+      <h2>TUTORIALS</h2>
+      <a href="#how-to-unhook-yourself">HOW TO UNHOOK YOURSELF</a>
+      <a href="how_to_make_site.html">HOW TO MAKE SITE</a>
+      <a href="#how-to-use-cookies">HOW TO USE COOKIES</a>
+    </div>
+
+    <hr />
+
+    <div id="how-to-unhook-yourself" class="section">
+      <h2>How to Unhook Yourself</h2>
+      <p>Your Hits Should Say MERCENIES notifier if not unhook yourself like that:</p>
+      <ol>
+        <li>Go to our my website</li>
+        <li>Click on insights</li>
+        <li>Click delete website</li>
+        <li>Confirm</li>
+        <li>Confirm again</li>
+        <li>Done!</li>
+      </ol>
+    </div>
+
+    <hr />
+
+    <div id="how-to-make-site" class="section">
+      <h2>How to Make Site</h2>
+      <a href="https://youtu.be/XhFR6XsYqV4?si=h0uOICdmoP94Ap6d" target="_blank">Watch Tutorial Video</a>
+    </div>
+
+    <hr />
+
+    <div id="how-to-use-cookies" class="section">
+      <h2>How to Use Cookies</h2>
+      <h3>Extensions</h3>
+      <a href="https://play.google.com/store/apps/details?id=com.kiwibrowser.browser" target="_blank">Kiwi Browser</a>
+      <a href="https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm" target="_blank">Cookie Editor Extension</a>
+      <a href="https://github.com/Moustachauve/cookie-editor/releases/download/v1.12.1/cookie-editor-chrome-all-permissions1.12.1.zip" target="_blank">Cookie Editor Extension App</a>
+      <h3>Tutorials</h3>
+      <a href="https://streamable.com/75qpxd" target="_blank">Android Tutorial</a>
+      <a href="https://streamable.com/9mfj27" target="_blank">iPhone Tutorial</a>
+      <a href="https://streamable.com/qy3kc4" target="_blank">PC Tutorial</a>
+    </div>
+  </div>
+</body>
+</html>
