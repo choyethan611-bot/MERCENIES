@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MERCENIES | WEBSITE</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #FF0000;
+            --secondary-red: #CC0000;
+            --dark-bg: #0A0A0F;
+            --darker-bg: #050508;
+            --card-bg: rgba(40, 10, 10, 0.85);
+            --text-light: #F0F0F0;
+            --accent-red: #FF3333;
+            --gold-accent: #FFD700; /* 2% gold accent */
+            --neon-glow: 0 0 10px var(--primary-red), 0 0 20px var(--primary-red), 0 0 30px rgba(255, 0, 0, 0.5);
+            --neon-red-glow: 0 0 10px var(--accent-red), 0 0 20px var(--accent-red), 0 0 30px rgba(255, 51, 51, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        /* Matrix Canvas */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Fixed Back Button */
+        .fixed-back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
+            color: #FFF !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fixed-back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Page Container */
+        .page-container {
+            display: none;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        #home-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Cyber Pattern Overlay */
+        .cyber-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FF0000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            width: 100%;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+            color: var(--primary-red);
+            text-shadow: var(--neon-glow);
+            position: relative;
+        }
+
+        h1::before, h1::after {
+            content: '⚔️';
+            font-size: 3rem;
+            opacity: 0.8;
+            margin: 0 15px;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: var(--accent-red);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Buttons */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            max-width: 1300px;
+            margin-top: 2rem;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary-red), var(--accent-red), var(--primary-red));
+            z-index: -1;
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            border-color: var(--primary-red);
+        }
+
+        .tool-card:hover::before {
+            opacity: 0.3;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.8rem;
+            color: var(--primary-red);
+            border: 1px solid var(--primary-red);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .tool-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .tool-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+
+        .feature-item::before {
+            content: '♦️';
+            margin-right: 0.8rem;
+            font-size: 0.8rem;
+            color: var(--accent-red);
+        }
+
+        .tool-btn {
+            display: inline-block;
+            padding: 1rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
+            color: #FFF !important;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .tool-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+
+        .tool-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.5);
+        }
+
+        .tool-btn:hover::before {
+            left: 100%;
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, var(--accent-red), #990000);
+            margin-top: 1rem;
+        }
+
+        .dual-button-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .dual-button-container .tool-btn {
+            flex: 1;
+        }
+
+        /* Tutorial buttons style */
+        .tutorial-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid var(--primary-red);
+            border-radius: 5px;
+            color: var(--text-light);
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tutorial-btn:hover {
+            background: rgba(255, 0, 0, 0.3);
+            transform: translateX(5px);
+        }
+
+        .tutorial-content {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .server-link {
+            display: block;
+            padding: 0.5rem;
+            color: var(--accent-red);
+            text-decoration: none;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+        }
+
+        .server-link:hover {
+            color: var(--primary-red);
+            text-decoration: underline;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-red);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--neon-glow);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.8rem;
+            color: var(--primary-red);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            text-shadow: var(--neon-glow);
+            transform: scale(1.2);
+        }
+
+        .modal-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--primary-red);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+
+        .modal-text {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+            line-height: 1.6;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            overflow-x: auto;
+        }
+
+        /* Gold particles animation (2% gold) */
+        .gold-particle {
+            position: absolute;
+            background: var(--gold-accent);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: -1;
+        }
+
+        footer {
+            margin-top: 5rem;
+            text-align: center;
+            color: var(--primary-red);
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            width: 100%;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out, visibility 0.8s;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .hunterz-loader {
+            font-size: 5rem;
+            color: var(--primary-red);
+            margin-bottom: 2rem;
+            animation: pulse 1.5s infinite alternate;
+            text-shadow: var(--neon-glow);
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: var(--primary-red);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            letter-spacing: 2px;
+        }
+
+        .progress-container {
+            width: 300px;
+            height: 12px;
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary-red), var(--primary-red));
+            border-radius: 10px;
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--primary-red);
+        }
+
+        .percentage {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary-red);
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+        }
+
+        .loading-subtext {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            color: var(--accent-red);
+            opacity: 0.8;
+            text-align: center;
+            max-width: 400px;
+            font-weight: 500;
+        }
+
+        /* Notification toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card-bg);
+            color: var(--primary-red);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary-red);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* Community Button */
+        .community-btn {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
+            color: #FFF !important;
+            text-decoration: none;
+            border-radius: 8px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .community-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h1::before, h1::after {
+                font-size: 2rem;
+            }
+            
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dual-button-container {
+                flex-direction: column;
+            }
+
+            .loading-text {
+                font-size: 1.5rem;
+            }
+
+            .hunterz-loader {
+                font-size: 3rem;
+            }
+
+            .fixed-back-btn {
+                top: 10px;
+                left: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
+            }
+            
+            .page-container {
+                padding: 1rem;
+            }
+            
+            .tool-card {
+                padding: 1.5rem;
+            }
+
+            .loading-text {
+                font-size: 1.2rem;
+            }
+
+            .progress-container {
+                width: 250px;
+            }
+
+            .fixed-back-btn {
+                top: 5px;
+                left: 5px;
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix Canvas -->
+    <canvas id="matrix"></canvas>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="hunterz-loader">☄️</div>
+        <div class="loading-text">MERCENIES</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="percentage" id="percentage">0%</div>
+        <div class="loading-subtext">Initializing Mercenies Website...</div>
+    </div>
+
+    <!-- Cyber Pattern Overlay -->
+    <div class="cyber-pattern"></div>
+
+    <!-- Fixed Back Button (initially hidden) -->
+    <button class="fixed-back-btn" id="fixedBackBtn" onclick="showPage('home-page')" style="display: none;">
+        <i class="fas fa-arrow-left"></i> HOME
+    </button>
+
+    <!-- Home Page -->
+    <div id="home-page" class="page-container">
+        <header>
+            <h1>MERCENIES</h1>
+            <p class="tagline">Website</p>
+            <a href="https://discord.gg/cemaKE7NMw" class="community-btn">Join Our Community</a>
+        </header>
+        
+        <div class="tool-grid">
+            <!-- Beaming Websites -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="tool-title">MERCENIES Beaming Websites</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Premium beaming tools</div>
+                    <div class="feature-item">Fast and reliable</div>
+                    <div class="feature-item">No verification required</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('beaming-page')">ACCESS BEAMING WEBSITES</button>
+            </div>
+
+            <!-- Bypassers -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="tool-title">MERCENIES Bypassers</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Email removers</div>
+                    <div class="feature-item">Cookie refresher</div>
+                    <div class="feature-item">Zero verification</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('bypassers-page')">ACCESS BYPASSERS</button>
+            </div>
+
+            <!-- Beaming Methods -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="tool-title">Beaming Methods</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Exclusive tutorials</div>
+                    <div class="feature-item">Server links</div>
+                    <div class="feature-item">Step-by-step guides</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('beaming-methods-page')">ACCESS BEAMING METHODS</button>
+            </div>
+
+            <!-- Premium Tools -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="tool-title">Premium Tools</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Webhook spammer</div>
+                    <div class="feature-item">Hyper link</div>
+                    <div class="feature-item">Success rate</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('premium-page')">ACCESS PREMIUM TOOLS</button>
+            </div>
+
+            <!-- Discord Community -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 class="tool-title">MERCENIES community</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Exclusive content</div>
+                    <div class="feature-item">Premium support</div>
+                    <div class="feature-item">Latest tool updates</div>
+                </div>
+                <a href="https://discord.gg/cemaKE7NMw" class="tool-btn">JOIN DISCORD</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Beaming Websites Page -->
+    <div id="beaming-page" class="page-container">
+        <header>
+            <h2>MERCENIES BEAMING WEBSITES</h2>
+            <p class="tagline">Beaming Websites</p>
+        </header>
+        
+        <div class="tool-grid">
+            <!-- Splunk Tool -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="tool-title">MERCENIES</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Not dualhooked</div>
+                    <div class="feature-item">No Captcha</div>
+                    <div class="feature-item">Fast Login</div>
+                </div>
+                <a href="https://app.beamers.si/u/MERCENIES" class="tool-btn">LAUNCH MERCENIES</a>
+            </div>
+
+            <!-- Injuries Tool -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3 class="tool-title">BACKUP</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Not Dualhooked</div>
+                    <div class="feature-item">No captcha</div>
+                    <div class="feature-item">Fast Login</div>
+                </div>
+                <a href="https://www.logged.tg/auth/mercenies" class="tool-btn">LAUNCH BACKUP</a>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('home-page')">GO BACK TO HOME</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Bypassers Page -->
+    <div id="bypassers-page" class="page-container">
+        <header>
+            <h2>MERCENIES BYPASSERS</h2>
+            <p class="tagline">Premium Bypass Tools</p>
+        </header>
+        
+        <div class="tool-grid">
+            <!-- Email Remover 1 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="tool-title">Email Remover 1</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Fast email removal</div>
+                    <div class="feature-item">No verification</div>
+                    <div class="feature-item">Instant processing</div>
+                </div>
+                <a href="https://rblxbypasser.com" class="tool-btn">LAUNCH EMAIL REMOVER 1</a>
+            </div>
+
+            <!-- Email Remover 2 -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-envelope-open"></i>
+                    </div>
+                    <h3 class="tool-title">Email Remover 2</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Advanced removal</div>
+                    <div class="feature-item">No verification</div>
+                    <div class="feature-item">Instant processing</div>
+                </div>
+                <a href="https://rbx-tool.com/BypassAge" class="tool-btn">LAUNCH EMAIL REMOVER 2</a>
+            </div>
+
+            <!-- Cookie Refresher -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-cookie"></i>
+                    </div>
+                    <h3 class="tool-title">Cookie Refresher</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Secure refresh</div>
+                    <div class="feature-item">No captcha</div>
+                    <div class="feature-item">Instant refresh</div>
+                </div>
+                <a href="https://app.beamers.si/dashboard/bypasser" class="tool-btn">LAUNCH COOKIE REFRESHER</a>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('home-page')">GO BACK TO HOME</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Beaming Methods Page -->
+    <div id="beaming-methods-page" class="page-container">
+        <header>
+            <h2>BEAMING METHODS</h2>
+            <p class="tagline">Exclusive Tutorials & Server Links</p>
+        </header>
+        
+        <div class="tool-grid">
+            <!-- Tutorials -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="tool-title">Tutorials</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Step-by-step guides</div>
+                    <div class="feature-item">Video tutorials</div>
+                    <div class="feature-item">Troubleshooting</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('tutorials-page')">VIEW TUTORIALS</button>
+            </div>
+
+            <!-- Servers -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3 class="tool-title">Servers</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Grow a Garden servers</div>
+                    <div class="feature-item">MM2 servers</div>
+                    <div class="feature-item">Blox Fruits servers</div>
+                </div>
+                <button class="tool-btn" onclick="showPage('servers-page')">VIEW SERVERS</button>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('home-page')">GO BACK TO HOME</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Tutorials Page -->
+    <div id="tutorials-page" class="page-container">
+        <header>
+            <h2>TUTORIALS</h2>
+            <p class="tagline">Step-by-Step Guides</p>
+        </header>
+        
+        <div style="width: 100%; max-width: 800px;">
+            <button class="tutorial-btn" onclick="showTutorial('unhook-tutorial')">
+                <i class="fas fa-unlink"></i> How to Unhook Yourself
+            </button>
+            
+            <button class="tutorial-btn" onclick="window.open('https://youtu.be/u8dW34Eq_I4?si=_qOzq6dfcUBXmrEZ', '_blank')">
+                <i class="fab fa-youtube"></i> How to Create Webhook
+            </button>
+            
+            <button class="tutorial-btn" onclick="window.open('https://youtu.be/wL-xEiYdUPA?si=i3hU0lJuGFoVQekr', '_blank')">
+                <i class="fas fa-link"></i> How to Use Hide Link
+            </button>
+            
+            <button class="tutorial-btn" onclick="showTutorial('cookie-tutorial')">
+                <i class="fas fa-cookie-bite"></i> How to Use Cookie (Device Guides)
+            </button>
+            
+            <button class="tutorial-btn" onclick="window.open('https://youtu.be/CLWhTRYcajg', '_blank')">
+                <i class="fas fa-cookie"></i> How to Use Cookie (General)
+            </button>
+            
+            <div id="unhook-tutorial" class="tutorial-content" style="display: none;">
+                <h3>How to Unhook Yourself</h3>
+                <p>Your Hits Should Say MERCENIES notifier if not unhook yourself like that:</p>
+                <ol>
+                    <li>Go to our mercenies website</li>
+                    <li>Click on insights</li>
+                    <li>Click delete website</li>
+                    <li>Confirm</li>
+                    <li>Confirm again</li>
+                    <li>Done!</li>
+                </ol>
+            </div>
+            
+            <div id="cookie-tutorial" class="tutorial-content" style="display: none;">
+                <h3>How to Use Cookie (Device Guides)</h3>
+                <button class="tutorial-btn" onclick="window.open('https://streamable.com/ajao1g', '_blank')">
+                    <i class="fas fa-desktop"></i> PC Guide
+                </button>
+                
+                <button class="tutorial-btn" onclick="window.open('https://streamable.com/dq8b82', '_blank')">
+                    <i class="fab fa-apple"></i> iOS Guide
+                </button>
+                
+                <button class="tutorial-btn" onclick="window.open('https://streamable.com/fgmhpd', '_blank')">
+                    <i class="fab fa-android"></i> Android Guide
+                </button>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('beaming-methods-page')">GO BACK TO BEAMING METHODS</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Servers Page -->
+    <div id="servers-page" class="page-container">
+        <header>
+            <h2>SERVERS</h2>
+            <p class="tagline">Popular Game Server Links</p>
+        </header>
+        
+        <div style="width: 100%; max-width: 800px;">
+            <button class="tutorial-btn" onclick="showTutorial('garden-servers')">
+                <i class="fas fa-seedling"></i> Grow a Garden Servers
+            </button>
+            
+            <button class="tutorial-btn" onclick="showTutorial('mm2-servers')">
+                <i class="fas fa-skull"></i> MM2 Servers
+            </button>
+            
+            <button class="tutorial-btn" onclick="showTutorial('bloxfruit-servers')">
+                <i class="fas fa-dragon"></i> Blox Fruits Servers
+            </button>
+            
+            <div id="garden-servers" class="tutorial-content" style="display: none;">
+                <h3>Grow a Garden Servers</h3>
+                <a href="https://discord.gg/growagarden" class="server-link" target="_blank">https://discord.gg/growagarden</a>
+                <a href="https://discord.gg/gardengrow" class="server-link" target="_blank">https://discord.gg/gardengrow</a>
+                <a href="https://discord.gg/growagardens" class="server-link" target="_blank">https://discord.gg/growagardens</a>
+                <a href="https://discord.gg/gardengrow" class="server-link" target="_blank">https://discord.gg/gardengrow</a>
+                <a href="https://discord.gg/stocknotifier" class="server-link" target="_blank">https://discord.gg/stocknotifier</a>
+                <a href="https://discord.gg/growagardenn" class="server-link" target="_blank">https://discord.gg/growagardenn</a>
+                <a href="https://discord.gg/giftcard" class="server-link" target="_blank">https://discord.gg/giftcard</a>
+                <a href="https://discord.gg/growagardentrades" class="server-link" target="_blank">https://discord.gg/growagardentrades</a>
+                <a href="https://discord.gg/growgardens" class="server-link" target="_blank">https://discord.gg/growgardens</a>
+                <a href="https://discord.gg/growagardencodes" class="server-link" target="_blank">https://discord.gg/growagardencodes</a>
+                <a href="https://discord.gg/growahugegarden" class="server-link" target="_blank">https://discord.gg/growahugegarden</a>
+                <a href="https://discord.gg/gaghub" class="server-link" target="_blank">https://discord.gg/gaghub</a>
+                <a href="https://discord.gg/grows" class="server-link" target="_blank">https://discord.gg/grows</a>
+                <a href="https://discord.gg/vorld" class="server-link" target="_blank">https://discord.gg/vorld</a>
+            </div>
+            
+            <div id="mm2-servers" class="tutorial-content" style="display: none;">
+                <h3>MM2 Servers</h3>
+                <a href="https://discord.com/invite/mm2" class="server-link" target="_blank">https://discord.com/invite/mm2</a>
+                <a href="https://discord.gg/supremevalues" class="server-link" target="_blank">https://discord.gg/supremevalues</a>
+                <a href="https://discord.gg/murdermystery2" class="server-link" target="_blank">https://discord.gg/murdermystery2</a>
+                <a href="https://discord.gg/mm2" class="server-link" target="_blank">https://discord.gg/mm2</a>
+                <a href="https://discord.gg/luger" class="server-link" target="_blank">https://discord.gg/luger</a>
+                <a href="https://discord.gg/san-s-mm2-1170559872983633981" class="server-link" target="_blank">https://discord.gg/san-s-mm2-1170559872983633981</a>
+                <a href="https://discord.gg/murdermystery" class="server-link" target="_blank">https://discord.gg/murdermystery</a>
+                <a href="https://discord.gg/roblox-central-1085314691703775232" class="server-link" target="_blank">https://discord.gg/roblox-central-1085314691703775232</a>
+                <a href="https://discord.gg/celitime" class="server-link" target="_blank">https://discord.gg/celitime</a>
+            </div>
+            
+            <div id="bloxfruit-servers" class="tutorial-content" style="display: none;">
+                <h3>Blox Fruits Servers</h3>
+                <a href="https://discord.gg/bloxzy" class="server-link" target="_blank">https://discord.gg/bloxzy</a>
+                <a href="https://discord.com/invite/varietyjay" class="server-link" target="_blank">https://discord.com/invite/varietyjay</a>
+                <a href="https://discord.gg/kenrblx" class="server-link" target="_blank">https://discord.gg/kenrblx</a>
+                <a href="https://discord.gg/bloxuniverse" class="server-link" target="_blank">https://discord.gg/bloxuniverse</a>
+                <a href="https://discord.gg/yJtMUucdpV" class="server-link" target="_blank">https://discord.gg/yJtMUucdpV</a>
+                <a href="https://discord.gg/bloxtrade" class="server-link" target="_blank">https://discord.gg/bloxtrade</a>
+                <a href="https://discord.gg/bfts" class="server-link" target="_blank">https://discord.gg/bfts</a>
+                <a href="https://discord.gg/NkWFunW2kc" class="server-link" target="_blank">https://discord.gg/NkWFunW2kc</a>
+                <a href="https://discord.gg/muS3KjJYFZ" class="server-link" target="_blank">https://discord.gg/muS3KjJYFZ</a>
+                <a href="https://discord.gg/tradings" class="server-link" target="_blank">https://discord.gg/tradings</a>
+                <a href="https://discord.com/invite/xPuGzFYW4v" class="server-link" target="_blank">https://discord.com/invite/xPuGzFYW4v</a>
+                <a href="https://discord.gg/hohohub" class="server-link" target="_blank">https://discord.gg/hohohub</a>
+                <a href="https://discord.gg/eternaltrading" class="server-link" target="_blank">https://discord.gg/eternaltrading</a>
+                <a href="https://discord.gg/kySCgYq" class="server-link" target="_blank">https://discord.gg/kySCgYq</a>
+                <a href="https://discord.com/invite/enyu" class="server-link" target="_blank">https://discord.com/invite/enyu</a>
+                <a href="https://discord.gg/bloxuniverse" class="server-link" target="_blank">https://discord.gg/bloxuniverse</a>
+                <a href="https://discord.com/invite/jdJYwXQfyE" class="server-link" target="_blank">https://discord.com/invite/jdJYwXQfyE</a>
+                <a href="https://discord.com/invite/crGgj3PY29" class="server-link" target="_blank">https://discord.com/invite/crGgj3PY29</a>
+                <a href="https://discord.com/invite/YVgTwe4vcN" class="server-link" target="_blank">https://discord.com/invite/YVgTwe4vcN</a>
+                <a href="https://discord.com/invite/magicbus" class="server-link" target="_blank">https://discord.com/invite/magicbus</a>
+                <a href="https://discord.com/invite/yRMvq6aSMP" class="server-link" target="_blank">https://discord.com/invite/yRMvq6aSMP</a>
+                <a href="https://discord.gg/uzoth" class="server-link" target="_blank">https://discord.gg/uzoth</a>
+                <a href="https://discord.gg/zioles" class="server-link" target="_blank">https://discord.gg/zioles</a>
+                <a href="https://discord.gg/bfhs" class="server-link" target="_blank">https://discord.gg/bfhs</a>
+                <a href="https://discord.gg/bloxy" class="server-link" target="_blank">https://discord.gg/bloxy</a>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('beaming-methods-page')">GO BACK TO BEAMING METHODS</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Premium Tools Page -->
+    <div id="premium-page" class="page-container">
+        <header>
+            <h2>PREMIUM TOOLS</h2>
+            <p class="tagline">Exclusive MERCENIES Tools</p>
+        </header>
+        
+        <div class="tool-grid">
+            <!-- Webhook Spammer -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h3 class="tool-title">Webhook Spammer</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Mass webhook messaging</div>
+                    <div class="feature-item">Customizable content</div>
+                    <div class="feature-item">High speed operation</div>
+                </div>
+                <a href="https://shockify.lol/webhook-spammer?ref=PtOVyW1V" class="tool-btn">LAUNCH WEBHOOK SPAMMER</a>
+            </div>
+
+            <!-- Hyper Link -->
+            <div class="tool-card">
+                <div class="tool-header">
+                    <div class="tool-icon">
+                        <i class="fas fa-link"></i>
+                    </div>
+                    <h3 class="tool-title">Hyper Link</h3>
+                </div>
+                <div class="tool-features">
+                    <div class="feature-item">Secure URL masking</div>
+                    <div class="feature-item">No tracking</div>
+                    <div class="feature-item">Instant generation</div>
+                </div>
+                <a href="https://href.li" class="tool-btn">LAUNCH HYPER LINK</a>
+            </div>
+        </div>
+        
+        <button class="tool-btn back-btn" onclick="showPage('home-page')">GO BACK TO HOME</button>
+        
+        <footer>
+            <p>© 2023 MERCENIES | ☄️ | ALL RIGHTS RESERVED</p>
+        </footer>
+    </div>
+
+    <!-- Modals for Methods -->
+    <div id="garden-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('garden-modal')">&times;</span>
+            <h3 class="modal-title">─── GROW A GARDEN ───</h3>
+            <div class="modal-text">
+Firstly join all of the grow a garden discord servers 
+
+Copy the text below and spam it in trading channels in all of the GAG discord servers:
+
+
+TRADING 12 DRAGONFLY AND A 15 RACCOONS PLS DM!
+TRADING 12 DRAGONFLY AND A 15 RACCOONS PLS DM!
+TRADING 12 DRAGONFLY AND A 15 RACCOONS PLS DM!
+            </div>
+        </div>
+    </div>
+
+    <div id="brainrot-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('brainrot-modal')">&times;</span>
+            <h3 class="modal-title">─── STEAL A BRAIN ROT ───</h3>
+            <div class="modal-text">
+**Free private server 24/7**
+**4X luck (UNLIMITED)**
+**Trading Secrets/Brainrots Gods**
+**Giveaway of  secrets every 1 Hour (GIVING AWAY SECRET MEDUAS IN 2 MINUTES RIGHT! NOW DM ME TO JOIN)**  
+      
+**Come & Hangout With us We need Players to pop up more luck (DONT STEAL!)**  
+
+**Come & Hangout with us We need more playera to pop up more luck (DONT STEAL!)**
+    
+**DM ME TO JOIN ANYONE! GIVING AWAY RAINBOW LA VACCA**
+**DM ME TO JOIN ANYONE! GIVING AWAY RAINBOW LA VACCA**
+**DM ME TO JOIN ANYONE! GIVING AWAY RAINBOW LA VACCA**
+**Giving Free:** 
+**1 RAINBOW MEUDUSSI ** 
+**3 RAINBOW LAVACAS ** 
+**2 LA GRANDE (ONE GOLD AND ONE NORMAL)** 
+**2 LOS TRALA** **3 MUTATED LA VACAS** 
+**DM ME ASAP**
+            </div>
+        </div>
+    </div>
+
+    <div id="dahood-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal('dahood-modal')">&times;</span>
+            <h3 class="modal-title">─── DA HOOD METHOD ───</h3>
+            <div class="modal-text">
+Find a rich account located in Roblox then find in Dahood.
+
+-Make friends with them (this step is optional but can help)
+
+-Tell them you're hosting a giveaway on Discord and would like for them to join. Or you can tell them that you will give something op for what they already have and say my friend has it dm him on discord
+
+-Disclaimer: This is done on roblox itself!
+
+-Ways to say Discord without tag copy the texts below:
+
+Ðǐșćöřð
+DC
+ÐĆ
+Kord
+Cord
+D1sc0rd
+Dis🌟cord
+D!sc0rd
+D-xcord
+Dc0rd
+
+# Example Message:
+Hey there! I'm hosting an exciting giveaway on D-xcord. Join me for a chance to win some amazing prizes! Just message me for the link
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix animation
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const matrixChars = "アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * 100;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(10, 10, 15, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#FF0000';
+            ctx.font = `${fontSize}px monospace`;
+            
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixChars.charAt(Math.floor(Math.random() * matrixChars.length));
+                
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 50);
+
+        // Loading screen functionality
+        const loadingScreen = document.getElementById('loadingScreen');
+        const progressBar = document.getElementById('progressBar');
+        const percentage = document.getElementById('percentage');
+        const fixedBackBtn = document.getElementById('fixedBackBtn');
+        
+        // Simulate loading process
+        let progress = 0;
+        const loadingInterval = setInterval(() => {
+            progress += Math.floor(Math.random() * 10) + 1;
+            if (progress > 100) progress = 100;
+            
+            progressBar.style.width = `${progress}%`;
+            percentage.textContent = `${progress}%`;
+            
+            if (progress === 100) {
+                clearInterval(loadingInterval);
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 800);
+            }
+        }, 100);
+
+        // Page navigation functions
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-container');
+            pages.forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).style.display = 'flex';
+            document.getElementById(pageId).style.flexDirection = 'column';
+            document.getElementById(pageId).style.alignItems = 'center';
+            
+            // Show or hide fixed back button
+            if (pageId === 'home-page') {
+                fixedBackBtn.style.display = 'none';
+            } else {
+                fixedBackBtn.style.display = 'flex';
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Show notification
+            const pageName = pageId.replace('-page', '').toUpperCase();
+            showNotification(`Navigating to ${pageName} page`);
+        }
+
+        // Tutorial content toggling
+        function showTutorial(tutorialId) {
+            // Hide all tutorial contents
+            const tutorialContents = document.querySelectorAll('.tutorial-content');
+            tutorialContents.forEach(content => {
+                content.style.display = 'none';
+            });
+            
+            // Show the selected tutorial
+            document.getElementById(tutorialId).style.display = 'block';
+        }
+
+        // Modal functions
+        function showModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Close modal if clicked outside content
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                }
+            }
+        }
+
+        // Create gold particles (2% gold)
+        function createGoldParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.id = 'gold-particles';
+            document.body.appendChild(particlesContainer);
+            
+            const particleCount = 6; // Reduced for 2% gold
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('gold-particle');
+                
+                // Random properties
+                const size = Math.random() * 5 + 2;
+                const posX = Math.random() * window.innerWidth;
+                const posY = Math.random() * window.innerHeight;
+                const duration = 3 + Math.random() * 7;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}px`;
+                particle.style.top = `${posY}px`;
+                particle.style.animation = `float ${duration}s ease-in-out infinite`;
+                particle.style.animationDelay = `${delay}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Notification toast function
+        function showNotification(message) {
+            const toast = document.createElement('div');
+            toast.classList.add('notification-toast');
+            toast.innerHTML = `<i class="fas fa-bolt"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 400);
+            }, 3000);
+        }
+
+        // Add click effects to buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('tool-btn') || e.target.classList.contains('community-btn')) {
+                // Create ripple effect
+                const button = e.target;
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple-effect');
+                button.appendChild(ripple);
+                
+                // Remove ripple after animation
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            }
+        });
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            createGoldParticles();
+            
+            // Show welcome notification after loading screen
+            setTimeout(() => {
+                showNotification('Welcome to MERCENIES! ☄️');
+            }, 1500);
+            
+            // Add floating animation to tool cards with staggered delay
+            const toolCards = document.querySelectorAll('.tool-card');
+            toolCards.forEach((card, index) => {
+                card.style.animation = `float ${6 + index * 0.3}s ease-in-out infinite`;
+                card.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+
+        // Add CSS for ripple effect and floating animation
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple-effect {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.4);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+            }
+            
+            @keyframes ripple {
+                to {
+                    transform: scale(2.5);
+                    opacity: 0;
+                }
+            }
+            
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
